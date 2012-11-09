@@ -60,6 +60,8 @@ Contributing
 
 If you think you've found a bug or are interested in contributing to this project
 check out `rapidsms-healthcare on Github <https://github.com/caktus/rapidsms-healthcare>`_.
+A full contributing guide can be found in the 
+`online documentation <http://rapidsms-healthcare.readthedocs.org/en/latest/contributing.html>`_.
 
 Development sponsored by `Caktus Consulting Group, LLC
 <http://www.caktusgroup.com/services>`_.
