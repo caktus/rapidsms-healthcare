@@ -37,7 +37,7 @@ or::
 
     python runtests.py
 
-To test rapidsms-healthcare in mutliple supported environments you can make use
+To test rapidsms-healthcare in multiple supported environments you can make use
 of the `tox <http://tox.readthedocs.org/>`_ configuration.::
 
     # You must have tox installed
