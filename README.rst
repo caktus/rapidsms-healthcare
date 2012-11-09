@@ -1,7 +1,22 @@
 RapidSMS Healthcare
 ========================
 
-Welcome to the documentation for rapidsms-healthcare!
+rapidsms-healthcare is a reusable Django application for managing healthcare provider
+and patient records for building RapidSMS applications. The goal is to create a common
+API for storing and accessing these records and have configurable storage backends
+for the data itself. For instance on site might store data using a SQL database via
+the Django ORM while another might store the data in OpenMRS. Additional Django/RapidSMS 
+applications can use this API to store and retrive data without knowning how it will be stored.
+
+
+Dependencies
+-----------------------------------
+
+rapidsms-appointments currently runs on Python 2.6 and 2.7 and requires the following
+Python packages:
+
+- Django >= 1.3
+- RapidSMS >= 0.9.6a
 
 
 Documentation
