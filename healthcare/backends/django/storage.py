@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.forms.models import model_to_dict
 
 from ..base import HealthcareStorage
