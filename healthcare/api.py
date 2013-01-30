@@ -18,7 +18,7 @@ class CategoryWrapper(object):
         self.backend, self.category = backend, category
 
     def __getattr__(self, name):
-        method = getattr(self.backend, '{0}_{1}'.format(name, self.category))
+        method = getattr(self.backend, '{0}_{1}'.format(name, self.category), None)
         if method is None:
             raise AttributeError(name)
         return method
