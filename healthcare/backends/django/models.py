@@ -32,8 +32,8 @@ class Patient(AuditModelBase):
     name = models.CharField(max_length=255)
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     birth_date = models.DateField(blank=True, null=True)
-    death_date = models.DateField(blank=True,null=True)
-    location_id = models.CharField(max_length=512, blank=True, default=u'')  
+    death_date = models.DateField(blank=True, null=True)
+    location = models.CharField(max_length=512, blank=True, default=u'')  
 
     def __unicode__(self):
         return self.name
@@ -43,7 +43,7 @@ class Provider(AuditModelBase):
     "Storage model for basic provider/health care worker information."
 
     name = models.CharField(max_length=255)
-    location_id = models.CharField(max_length=512, blank=True, default=u'')
+    location = models.CharField(max_length=512, blank=True, default=u'')
 
     def __unicode__(self):
         return self.name
@@ -62,7 +62,7 @@ class PatientID(AuditModelBase):
     uid = models.CharField(max_length=255)
     uid_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     patient = models.ForeignKey(Patient)
-    location_id = models.CharField(max_length=512, blank=True, default=u'')
+    location = models.CharField(max_length=512)
 
     def __unicode__(self):
         return self.uid
