@@ -2,6 +2,12 @@
 Healthcare data storage backend API. All backends should extend from this base.
 """
 
+from django.core.exceptions import ImproperlyConfigured
+
+
+class InvalidBackendError(ImproperlyConfigured):
+    pass 
+
 
 class HealthcareStorage(object):
 
