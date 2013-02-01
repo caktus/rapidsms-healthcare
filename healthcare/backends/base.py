@@ -1,7 +1,7 @@
 """
 Healthcare data storage backend API. All backends should extend from this base.
 """
-from __future__ import absolute_import 
+from __future__ import absolute_import
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import importlib

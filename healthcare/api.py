@@ -1,9 +1,5 @@
 """
 Healthcare API client.
-
-from healthcare.api import client
-
-patient = client.patients.get(123)
 """
 
 from django.conf import settings
@@ -17,11 +13,24 @@ class CategoryWrapper(object):
     def __init__(self, backend, category):
         self.backend, self.category = backend, category
 
-    def __getattr__(self, name):
-        method = getattr(self.backend, '{0}_{1}'.format(name, self.category), None)
-        if method is None:
-            raise AttributeError(name)
-        return method
+    def get(self, id, **kwargs):
+        method = getattr(self.backend, 'get_{category}'.format(category=self.category))
+        result = method(id, **kwargs)
+        if result is None:
+            pass
+        return result
+
+    def create(self, **kwargs):
+        method = getattr(self.backend, 'create_{category}'.format(category=self.category))
+        result = method(kwargs)
+        if result is None:
+            pass
+        return result
+
+    def update(self, id, **kwargs):
+        method = getattr(self.backend, 'update_{category}'.format(category=self.category))
+        result = method(id, kwargs)
+        return bool(result)
 
 
 class HealthcareAPI(object):
