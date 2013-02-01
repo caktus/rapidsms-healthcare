@@ -19,12 +19,14 @@ class DummyStorage(HealthcareStorage):
         uid = uuid.uuid4().int
         self._patients[uid] = data
         data['id'] = uid
-        return data 
+        return data
 
     def update_patient(self, id, data):
         "Update a patient record by ID."
         if id in self._patients:
             self._patients[id].update(data)
+            return True
+        return False
 
     def get_provider(self, id):
         "Retrieve a provider record by ID."
@@ -41,3 +43,5 @@ class DummyStorage(HealthcareStorage):
         "Update a provider record by ID."
         if id in self._providers:
             self._providers[id].update(data)
+            return True
+        return False

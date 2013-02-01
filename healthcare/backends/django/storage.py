@@ -54,7 +54,10 @@ class DjangoStorage(HealthcareStorage):
         "Update a patient record by ID."
         # FIXME: Might need additional translation of field names
         # FIXME: Might need additional error handling
-        Patient.objects.filter(pk=id).update(**data)
+        try:
+            return Patient.objects.filter(pk=id).update(**data)
+        except ValueError:
+            return False
 
     def get_provider(self, id):
         "Retrieve a provider record by ID."
@@ -78,4 +81,7 @@ class DjangoStorage(HealthcareStorage):
         "Update a provider record by ID."
         # FIXME: Might need additional translation of field names
         # FIXME: Might need additional error handling
-        Provider.objects.filter(pk=id).update(**data)
+        try:
+            return Provider.objects.filter(pk=id).update(**data)
+        except ValueError:
+            return False
