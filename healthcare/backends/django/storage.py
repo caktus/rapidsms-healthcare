@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from django.forms.models import model_to_dict
+from django.utils.timezone import now
 
 from ..base import HealthcareStorage
 from .models import Patient, Provider, PatientID
@@ -13,6 +14,8 @@ class DjangoStorage(HealthcareStorage):
         # Mapping of all fields
         # Might need additional translation of field names
         result = model_to_dict(patient)
+        result['created_date'] = patient.created_date
+        result['updated_date'] = patient.updated_date
         return result
 
     def _provider_to_dict(self, provider):
@@ -20,6 +23,8 @@ class DjangoStorage(HealthcareStorage):
         # Mapping of all fields
         # Might need additional translation of field names
         result = model_to_dict(provider)
+        result['created_date'] = provider.created_date
+        result['updated_date'] = provider.updated_date
         return result
 
     def get_patient(self, id, location=None):
@@ -55,6 +60,7 @@ class DjangoStorage(HealthcareStorage):
         # FIXME: Might need additional translation of field names
         # FIXME: Might need additional error handling
         try:
+            data['updated_date'] = now()
             return Patient.objects.filter(pk=id).update(**data)
         except ValueError:
             return False
@@ -71,6 +77,7 @@ class DjangoStorage(HealthcareStorage):
         "Create a provider record."
         # FIXME: Might need additional translation of field names
         try:
+            data['updated_date'] = now()
             provider = Provider.objects.create(**data)
         except:
             # FIXME: Can we make this exception tighter?

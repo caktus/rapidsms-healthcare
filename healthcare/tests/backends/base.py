@@ -1,3 +1,5 @@
+import datetime
+
 from ...backends.base import get_backend
 
 
@@ -14,6 +16,8 @@ class BackendTestMixin(object):
         patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
         # Newly create patients should have an id
         self.assertTrue(patient['id'])
+        self.assertEqual(patient['created_date'].date(), datetime.date.today())
+        self.assertTrue(patient['updated_date'].date(), datetime.date.today())
 
     def test_get_patient(self):
         "Retrive a stored patient."
@@ -24,10 +28,12 @@ class BackendTestMixin(object):
     def test_update_patient(self):
         "Update a field in the patient record."
         patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        updated = patient['updated_date']
         result = self.backend.update_patient(patient['id'], {'name': 'Jane'})
         self.assertTrue(result)
         patient = self.backend.get_patient(patient['id'])
         self.assertEqual(patient['name'], 'Jane')
+        self.assertTrue(patient['updated_date'] > updated)
 
     def test_get_missing_patient(self):
         "Backend should return None if the patient was not found."
