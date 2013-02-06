@@ -44,3 +44,37 @@ class BackendTestMixin(object):
         "Backend should return a False value if no patient was found to update."
         result = self.backend.update_patient('XXX', {'name': 'Jane'})
         self.assertFalse(result)
+
+    def test_create_provider(self):
+        "Store a new provider."
+        provider = self.backend.create_provider({'name': 'Joe'})
+        # Newly create provider should have an id
+        self.assertTrue(provider['id'])
+        self.assertEqual(provider['created_date'].date(), datetime.date.today())
+        self.assertTrue(provider['updated_date'].date(), datetime.date.today())
+
+    def test_get_provider(self):
+        "Retrive a stored provider."
+        provider = self.backend.create_provider({'name': 'Joe'})
+        fetched = self.backend.get_provider(provider['id'])
+        self.assertEqual(provider, fetched)
+
+    def test_update_provider(self):
+        "Update a field in the provider record."
+        provider = self.backend.create_provider({'name': 'Joe'})
+        updated = provider['updated_date']
+        result = self.backend.update_provider(provider['id'], {'name': 'Jane'})
+        self.assertTrue(result)
+        provider = self.backend.get_provider(provider['id'])
+        self.assertEqual(provider['name'], 'Jane')
+        self.assertTrue(provider['updated_date'] > updated)
+
+    def test_get_missing_provider(self):
+        "Backend should return None if the provider was not found."
+        fetched = self.backend.get_provider('XXX')
+        self.assertEqual(None, fetched)
+
+    def test_update_missing_provider(self):
+        "Backend should return a False value if no provider was found to update."
+        result = self.backend.update_provider('XXX', {'name': 'Jane'})
+        self.assertFalse(result)

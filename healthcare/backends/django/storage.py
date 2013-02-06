@@ -77,7 +77,6 @@ class DjangoStorage(HealthcareStorage):
         "Create a provider record."
         # FIXME: Might need additional translation of field names
         try:
-            data['updated_date'] = now()
             provider = Provider.objects.create(**data)
         except:
             # FIXME: Can we make this exception tighter?
@@ -89,6 +88,7 @@ class DjangoStorage(HealthcareStorage):
         # FIXME: Might need additional translation of field names
         # FIXME: Might need additional error handling
         try:
+            data['updated_date'] = now()
             return Provider.objects.filter(pk=id).update(**data)
         except ValueError:
             return False
