@@ -119,6 +119,9 @@ Operations on patient data are done through ``client.providers``. Currently the 
     # Refetch the provider record
     provider = client.providers.get(provider['id'])
 
+    # Delete a provider recod
+    client.providers.delete(provider['id'])
+
 
 Provider Data Model
 ____________________________________
