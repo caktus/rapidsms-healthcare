@@ -29,6 +29,12 @@ class APIClientTestCase(unittest.TestCase):
             self.client.patients.update(123, name='Jane')
             self.assertTrue(update.called, "Backend update_patient should be called.")
 
+    def test_delete_patient(self):
+        "Delete a patient record with the API client."
+        with patch('healthcare.backends.dummy.DummyStorage.delete_patient') as delete:
+            self.client.patients.delete(123)
+            self.assertTrue(delete.called, "Backend delete_patient should be called.")
+
     def test_create_provider(self):
         "Create a new provider with the API client."
         with patch('healthcare.backends.dummy.DummyStorage.create_provider') as create:
@@ -46,6 +52,12 @@ class APIClientTestCase(unittest.TestCase):
         with patch('healthcare.backends.dummy.DummyStorage.update_provider') as update:
             self.client.providers.update(123, name='Jane')
             self.assertTrue(update.called, "Backend update_provider should be called.")
+
+    def test_delete_provider(self):
+        "Delete a provide record with the API client."
+        with patch('healthcare.backends.dummy.DummyStorage.delete_provider') as delete:
+            self.client.providers.delete(123)
+            self.assertTrue(delete.called, "Backend delete_provider should be called.")
 
     def test_invalid_category(self):
         "Attempt to access an invalid category."
@@ -72,3 +84,11 @@ class APIClientTestCase(unittest.TestCase):
     def test_update_missing_provider(self):
         "Try to update a provider which doesn't exist."
         self.assertFalse(self.client.providers.update(123, name='Jane'))
+
+    def test_delete_missing_patient(self):
+        "Try to delete a patient which doesn't exist."
+        self.assertFalse(self.client.patients.delete(123))
+
+    def test_delete_missing_provider(self):
+        "Try to delete a provider which doesn't exist."
+        self.assertFalse(self.client.providers.delete(123))

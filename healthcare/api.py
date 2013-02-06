@@ -25,8 +25,11 @@ class CategoryWrapper(object):
 
     def update(self, id, **kwargs):
         method = getattr(self.backend, 'update_{category}'.format(category=self.category))
-        result = method(id, kwargs)
-        return bool(result)
+        return bool(method(id, kwargs))
+
+    def delete(self, id):
+        method = getattr(self.backend, 'delete_{category}'.format(category=self.category))
+        return bool(method(id))
 
 
 class PatientWrapper(CategoryWrapper):
