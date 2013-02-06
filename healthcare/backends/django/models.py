@@ -26,12 +26,13 @@ class Patient(AuditModelBase):
     MALE = 'M'
     FEMALE = 'F'
     SEX_CHOICES = (
+        ('', ''),
         (MALE, _('Male')),
         (FEMALE, _('Female')),
     )
 
     name = models.CharField(max_length=255)
-    sex = models.CharField(max_length=1, choices=SEX_CHOICES)
+    sex = models.CharField(max_length=1, choices=SEX_CHOICES, blank=True, default='')
     birth_date = models.DateField(blank=True, null=True)
     death_date = models.DateField(blank=True, null=True)
     location = models.CharField(max_length=512, blank=True, default='')
