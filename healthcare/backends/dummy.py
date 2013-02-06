@@ -37,6 +37,13 @@ class DummyStorage(HealthcareStorage):
             return True
         return False
 
+    def delete_patient(self, id):
+        "Delete a patient record by ID."
+        if id in self._patients:
+            del self._patients[id]
+            return True
+        return False
+
     def get_provider(self, id):
         "Retrieve a provider record by ID."
         return self._providers.get(id)
@@ -57,5 +64,12 @@ class DummyStorage(HealthcareStorage):
         if id in self._providers:
             data['updated_date'] = now()
             self._providers[id].update(data)
+            return True
+        return False
+
+    def delete_provider(self, id):
+        "Delete a provider record by ID."
+        if id in self._providers:
+            del self._providers[id]
             return True
         return False

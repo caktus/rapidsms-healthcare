@@ -38,6 +38,10 @@ class HealthcareStorage(object):
         "Update a patient record by ID."
         raise NotImplementedError("Define in subclass")
 
+    def delete_patient(self, id):
+        "Delete a patient record."
+        raise NotImplementedError("Define in subclass")
+
     def get_provider(self, id):
         "Retrieve a provider record by ID."
         raise NotImplementedError("Define in subclass")
@@ -48,4 +52,8 @@ class HealthcareStorage(object):
 
     def update_provider(self, id, data):
         "Update a provider record by ID."
+        raise NotImplementedError("Define in subclass")
+
+    def delete_provider(self, id):
+        "Delete a provider record."
         raise NotImplementedError("Define in subclass")

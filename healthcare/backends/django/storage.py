@@ -65,6 +65,18 @@ class DjangoStorage(HealthcareStorage):
         except ValueError:
             return False
 
+    def delete_patient(self, id):
+        "Delete a patient record by ID."
+        try:
+            patient = Patient.objects.filter(pk=id)
+        except ValueError:
+            return False
+        else:
+            if patient.exists():
+                patient.delete()
+                return True
+            return False
+
     def get_provider(self, id):
         "Retrieve a provider record by ID."
         try:
@@ -91,4 +103,16 @@ class DjangoStorage(HealthcareStorage):
             data['updated_date'] = now()
             return Provider.objects.filter(pk=id).update(**data)
         except ValueError:
+            return False
+
+    def delete_provider(self, id):
+        "Delete a provider record by ID."
+        try:
+            provider = Provider.objects.filter(pk=id)
+        except ValueError:
+            return False
+        else:
+            if provider.exists():
+                provider.delete()
+                return True
             return False

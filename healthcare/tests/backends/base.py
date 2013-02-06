@@ -45,6 +45,19 @@ class BackendTestMixin(object):
         result = self.backend.update_patient('XXX', {'name': 'Jane'})
         self.assertFalse(result)
 
+    def test_delete_patient(self):
+        "Delete an existing patient."
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        result = self.backend.delete_patient(patient['id'])
+        self.assertTrue(result)
+        fetched = self.backend.get_patient(patient['id'])
+        self.assertEqual(None, fetched)
+
+    def test_delete_missing_patient(self):
+        "Attempt to delete a patient which doesn't exist."
+        result = self.backend.delete_patient('XXX')
+        self.assertFalse(result)
+
     def test_create_provider(self):
         "Store a new provider."
         provider = self.backend.create_provider({'name': 'Joe'})
@@ -77,4 +90,17 @@ class BackendTestMixin(object):
     def test_update_missing_provider(self):
         "Backend should return a False value if no provider was found to update."
         result = self.backend.update_provider('XXX', {'name': 'Jane'})
+        self.assertFalse(result)
+
+    def test_delete_provider(self):
+        "Delete an existing provider."
+        provider = self.backend.create_provider({'name': 'Joe'})
+        result = self.backend.delete_provider(provider['id'])
+        self.assertTrue(result)
+        fetched = self.backend.get_provider(provider['id'])
+        self.assertEqual(None, fetched)
+
+    def test_delete_missing_provider(self):
+        "Attempt to delete a provider which doesn't exist."
+        result = self.backend.delete_provider('XXX')
         self.assertFalse(result)

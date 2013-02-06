@@ -29,7 +29,7 @@ Patient Information
 ------------------------------------
 
 Operations on patient data are done through ``client.patients``. Currently the backend supports
-``create``, ``get`` and ``update``::
+``create``, ``get``, ``update`` and ``delete``::
 
     from healthcare.api import client
 
@@ -41,6 +41,9 @@ Operations on patient data are done through ``client.patients``. Currently the b
 
     # Refetch the patient record
     patient = client.patients.get(patient['id'])
+
+    # Delete a patient recod
+    client.patients.delete(patient['id'])
 
 
 Patient Data Model
@@ -90,6 +93,13 @@ ____________________________________
 
 ``patients.get`` returns a patient's data as dictionary for the given id. If no matching
 patient was found this will raise a ``PatientNotFound`` exception.
+
+
+``patients.delete``
+____________________________________
+
+``patients.delete`` takes the id of the patient and returns a boolean to note whether a
+matching patient was found and deleted.
 
 
 Provider Information
@@ -154,3 +164,10 @@ ____________________________________
 
 ``providers.get`` returns a provider's data as dictionary for the given id. If no matching
 provider was found this will raise a ``ProviderNotFound`` exception.
+
+
+``providers.delete``
+____________________________________
+
+``providers.delete`` takes the id of the provider and returns a boolean to note whether a
+matching provider was found and deleted.
