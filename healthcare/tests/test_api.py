@@ -3,6 +3,7 @@ import unittest
 from mock import patch
 
 from ..api import HealthcareAPI
+from ..exceptions import PatientDoesNotExist, ProviderDoesNotExist
 
 
 class APIClientTestCase(unittest.TestCase):
@@ -18,15 +19,15 @@ class APIClientTestCase(unittest.TestCase):
 
     def test_get_patient(self):
         "Get a patient record with the API client."
-        with patch('healthcare.backends.dummy.DummyStorage.get_patient') as create:
+        with patch('healthcare.backends.dummy.DummyStorage.get_patient') as get:
             self.client.patients.get(123)
-            self.assertTrue(create.called, "Backend get_patient should be called.")
+            self.assertTrue(get.called, "Backend get_patient should be called.")
 
     def test_update_patient(self):
         "Update a patient record with the API client."
-        with patch('healthcare.backends.dummy.DummyStorage.update_patient') as create:
+        with patch('healthcare.backends.dummy.DummyStorage.update_patient') as update:
             self.client.patients.update(123, name='Jane')
-            self.assertTrue(create.called, "Backend update_patient should be called.")
+            self.assertTrue(update.called, "Backend update_patient should be called.")
 
     def test_create_provider(self):
         "Create a new provider with the API client."
@@ -36,15 +37,15 @@ class APIClientTestCase(unittest.TestCase):
 
     def test_get_provider(self):
         "Get a provider record with the API client."
-        with patch('healthcare.backends.dummy.DummyStorage.get_provider') as create:
+        with patch('healthcare.backends.dummy.DummyStorage.get_provider') as get:
             self.client.providers.get(123)
-            self.assertTrue(create.called, "Backend get_provider should be called.")
+            self.assertTrue(get.called, "Backend get_provider should be called.")
 
     def test_update_provider(self):
         "Update a provider record with the API client."
-        with patch('healthcare.backends.dummy.DummyStorage.update_provider') as create:
+        with patch('healthcare.backends.dummy.DummyStorage.update_provider') as update:
             self.client.providers.update(123, name='Jane')
-            self.assertTrue(create.called, "Backend update_provider should be called.")
+            self.assertTrue(update.called, "Backend update_provider should be called.")
 
     def test_invalid_category(self):
         "Attempt to access an invalid category."
@@ -55,3 +56,19 @@ class APIClientTestCase(unittest.TestCase):
         "Attempt to access an method for a given category."
         test = lambda: self.client.patients.foobar
         self.assertRaises(AttributeError, test)
+
+    def test_get_missing_patient(self):
+        "Try to get a patient which doesn't exist."
+        self.assertRaises(PatientDoesNotExist, self.client.patients.get, 123)
+
+    def test_get_missing_provider(self):
+        "Try to get a provider which doesn't exist."
+        self.assertRaises(ProviderDoesNotExist, self.client.providers.get, 123)
+
+    def test_update_missing_patient(self):
+        "Try to update a patient which doesn't exist."
+        self.assertFalse(self.client.patients.update(123, name='Jane'))
+
+    def test_update_missing_provider(self):
+        "Try to update a provider which doesn't exist."
+        self.assertFalse(self.client.providers.update(123, name='Jane'))
