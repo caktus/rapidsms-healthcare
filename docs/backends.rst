@@ -46,6 +46,13 @@ defined below:
         Patient data for the given ``id`` should be deleted. This method should return ``True`` if a patient
         was found and deleted and ``False`` otherwise.
 
+    .. method:: filter_patients(*lookups)
+
+        Returns a list of patients matching the set of lookups. If no patients were found it should
+        return an empty list. If no lookups were passed it should return all patients. The details
+        of the lookup structure is given in the next section. When mutliple lookups are passed,
+        the intersection of the results should be returned (default to AND the expressions).
+
     .. method:: get_provider(id)
 
         Provider data should be fetched for the given ``id`` and returned as a dictionary. If
@@ -66,6 +73,39 @@ defined below:
 
         Provider data for the given ``id`` should be deleted. This method should return ``True`` if a
         provider was found and deleted and ``False`` otherwise.
+
+    .. method:: filter_providers(*lookups)
+
+        Returns a list of providers matching the set of lookups. If no providers were found it should
+        return an empty list. If no lookups were passed it should return all providers. The details
+        of the lookup structure is given in the next section. When mutliple lookups are passed,
+        the intersection of the results should be returned (default to AND the expressions).
+
+
+Backend Lookups
+------------------------------------
+
+The above :py:meth:`HealthcareStorage.filter_patients` and py:meth:`HealthcareStorage.filter_providers`
+methods are each passed a list of lookups for filtering the underlying records. Each of these
+lookups is a 3-tuple ``(field_name, operator, value)``. The ``field_name`` is passed as a string
+and must match a field name on the corresponding data model. The ``value`` is the requested value for
+comparison which should be a standard Python type (int, float, list, sting, date, datetime, etc). The
+``operator`` is one of the below operators from `operator module <http://docs.python.org/2/library/operator.html>`_.
+
+================================    ==============
+Operator                            Comparison
+================================    ==============
+``operator.eq`` (``==``)            Field is an exact match to the value
+``operator.mod`` (``%``)            Field contains the value
+``operator.contains`` (``in``)      Field is an exact match to one of the values in the value (list/tuple)
+``operator.lt`` (``<``)             Field is less than the value
+``operator.lte`` (``<=``)           Field is less than or equal to the value
+``operator.gt`` (``>``)             Field is greater than the value
+``operator.gte`` (``>=``)           Field is greater than or equal to the value
+================================    ==============
+
+The backend is responsible for mapping these operators to the meaningful expressions for its
+storage method.
 
 
 Testing the Backend
