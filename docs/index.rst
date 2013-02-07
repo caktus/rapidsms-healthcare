@@ -13,6 +13,7 @@ Contents
 
     overview
     usage
+    backends
     settings
     contributing
     releases

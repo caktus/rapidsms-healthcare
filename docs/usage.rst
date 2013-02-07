@@ -46,6 +46,8 @@ Operations on patient data are done through ``client.patients``. Currently the b
     client.patients.delete(patient['id'])
 
 
+.. _PATIENT_DATA_MODEL:
+
 Patient Data Model
 ____________________________________
 
@@ -123,6 +125,8 @@ Operations on patient data are done through ``client.providers``. Currently the 
     client.providers.delete(provider['id'])
 
 
+.. _PROVIDER_DATA_MODEL:
+
 Provider Data Model
 ____________________________________
 
@@ -174,3 +178,4 @@ ____________________________________
 
 ``providers.delete`` takes the id of the provider and returns a boolean to note whether a
 matching provider was found and deleted.
+
