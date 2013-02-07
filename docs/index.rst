@@ -12,6 +12,7 @@ Contents
     :maxdepth: 2
 
     overview
+    quick-start
     usage
     backends
     settings
