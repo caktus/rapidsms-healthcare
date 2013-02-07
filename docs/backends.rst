@@ -124,3 +124,6 @@ attach the path of the backend to the ``backend`` attribute.
 
     class FancyBackendTestCase(BackendTestMixin, TestCase):
         backend = 'path.to.new.backend'
+
+This should not be considered an complete set of tests and the developers should
+write additional tests to cover edge cases in their backend.
