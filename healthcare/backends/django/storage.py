@@ -1,13 +1,27 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
+import operator
+
+from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.utils.timezone import now
 
+from .. import comparisons
 from ..base import HealthcareStorage
 from .models import Patient, Provider, PatientID
 
 
 class DjangoStorage(HealthcareStorage):
+
+    _comparison_mapping = {
+        comparisons.EQUAL: 'exact',
+        comparisons.LIKE: 'contains',
+        comparisons.IN: 'in',
+        comparisons.LT: 'lt',
+        comparisons.LTE: 'lte',
+        comparisons.GT: 'gt',
+        comparisons.GTE: 'gte',
+    }
 
     def _patient_to_dict(self, patient):
         "Convert a Patient model to a dictionary."
@@ -26,6 +40,12 @@ class DjangoStorage(HealthcareStorage):
         result['created_date'] = provider.created_date
         result['updated_date'] = provider.updated_date
         return result
+
+    def _lookup_to_q(self, lookup):
+        field, operator, value = lookup
+        lookup_type = self._comparison_mapping[operator]
+        params = {'{0}__{1}'.format(field, lookup_type): value}
+        return Q(**params)
 
     def get_patient(self, id, location=None):
         "Retrieve a patient record by ID."
@@ -77,6 +97,15 @@ class DjangoStorage(HealthcareStorage):
                 return True
             return False
 
+    def filter_patients(self, *lookups):
+        "Find patient records matching the given lookups."
+        # Construct Q objects from lookups
+        if lookups:
+            q = reduce(operator.and_, map(self._lookup_to_q, lookups))
+        else:
+            q = Q()
+        return map(self._patient_to_dict, Patient.objects.filter(q))
+
     def get_provider(self, id):
         "Retrieve a provider record by ID."
         try:
@@ -116,3 +145,12 @@ class DjangoStorage(HealthcareStorage):
                 provider.delete()
                 return True
             return False
+
+    def filter_providers(self, *lookups):
+        "Find provider records matching the given lookups."
+        # Construct Q objects from lookups
+        if lookups:
+            q = reduce(operator.and_, map(self._lookup_to_q, lookups))
+        else:
+            q = Q()
+        return map(self._provider_to_dict, Provider.objects.filter(q))

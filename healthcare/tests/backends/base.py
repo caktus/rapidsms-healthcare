@@ -136,8 +136,8 @@ class BackendTestMixin(object):
         yesterday = today - datetime.timedelta(days=1)
         tomorrow = today + datetime.timedelta(days=1)
         last_week = today - datetime.timedelta(days=7)
-        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M', 'birth_day': today})
-        other_patient = self.backend.create_patient({'name': 'Jane', 'sex': 'F', 'birth_day': last_week})
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M', 'birth_date': today})
+        other_patient = self.backend.create_patient({'name': 'Jane', 'sex': 'F', 'birth_date': last_week})
         tests = (
             # Operator, Value, Expected
             (comparisons.LT, today, [other_patient]),
