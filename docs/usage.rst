@@ -15,14 +15,41 @@ operations for the patient and provider data::
 
     patient = client.patients.create(name='Joe', sex='M')
 
-Where this data is stored configured by the :ref:`HEALTHCARE_STORAGE_BACKEND` setting. The
-default storage uses the Django ORM to store the information.
+
+Available Backends
+------------------------------------
+
+Where this data is stored configured by the :ref:`HEALTHCARE_STORAGE_BACKEND` setting. Below are
+all of the available backends included in the rapidsms-healthcare distribution.
+
+
+.. _DjangoStorage:
+
+DjangoStorage
+____________________________________
+
+Path: ``'healthcare.backends.django.DjangoStorage'``
+
+This is the default storage backend. It stores the patient and provider information using the
+Django ORM. To use this backend you must include ``'healthcare.backends.django'`` in your
+``INSTALLED_APPS`` setting to create the necessary tables.
 
 .. warning::
 
     Though the default storage backend uses the Django ORM, developers should resist
     all temptation to access the models directly (including creating FKs in additional models)
     as that will break the portability of the application.
+
+
+.. _DummyStorage:
+
+DummyStorage
+____________________________________
+
+Path: ``'healthcare.backends.dummy.DummyStorage'``
+
+This backend stores the data in local memory. This backend is indended only for testing and
+should never be used in a production setting.
 
 
 Patient Information
