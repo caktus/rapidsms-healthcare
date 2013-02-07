@@ -90,18 +90,18 @@ methods are each passed a list of lookups for filtering the underlying records. 
 lookups is a 3-tuple ``(field_name, operator, value)``. The ``field_name`` is passed as a string
 and must match a field name on the corresponding data model. The ``value`` is the requested value for
 comparison which should be a standard Python type (int, float, list, sting, date, datetime, etc). The
-``operator`` is one of the below operators from `operator module <http://docs.python.org/2/library/operator.html>`_.
+``operator`` is one of the below constants from the ``healthcare.backends.comparisons`` module.
 
 ================================    ==============
 Operator                            Comparison
 ================================    ==============
-``operator.eq`` (``==``)            Field is an exact match to the value
-``operator.mod`` (``%``)            Field contains the value
-``operator.contains`` (``in``)      Field is an exact match to one of the values in the value (list/tuple)
-``operator.lt`` (``<``)             Field is less than the value
-``operator.lte`` (``<=``)           Field is less than or equal to the value
-``operator.gt`` (``>``)             Field is greater than the value
-``operator.gte`` (``>=``)           Field is greater than or equal to the value
+``EQUAL``                           Field is an exact match to the value
+``LIKE``                            Field contains the value
+``IN``                              Field is an exact match to one of the values in the value (list/tuple)
+``LT``                              Field is less than the value
+``LTE``                             Field is less than or equal to the value
+``GT``                              Field is greater than the value
+``GTE``                             Field is greater than or equal to the value
 ================================    ==============
 
 The backend is responsible for mapping these operators to the meaningful expressions for its

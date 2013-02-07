@@ -1,6 +1,7 @@
 import datetime
 import operator
 
+from ...backends import comparisons
 from ...backends.base import get_backend
 
 
@@ -119,11 +120,11 @@ class BackendTestMixin(object):
         other_patient = self.backend.create_patient({'name': 'Jane', 'sex': 'F'})
         tests = (
             # Operator, Value, Expected
-            (operator.eq, 'Joe', [patient]),
-            (operator.mod, 'Jo', [patient]),
-            (operator.mod, 'J', [patient, other_patient]),
-            (operator.contains, ['Joe'], [patient]),
-            (operator.contains, ['Joe', 'Jane'], [patient, other_patient]),
+            (comparisons.EQUAL, 'Joe', [patient]),
+            (comparisons.LIKE, 'Jo', [patient]),
+            (comparisons.LIKE, 'J', [patient, other_patient]),
+            (comparisons.IN, ['Joe'], [patient]),
+            (comparisons.IN, ['Joe', 'Jane'], [patient, other_patient]),
         )
         for op, val, expected in tests:
             result = self.backend.filter_patients(('name', op, val))
@@ -139,11 +140,11 @@ class BackendTestMixin(object):
         other_patient = self.backend.create_patient({'name': 'Jane', 'sex': 'F', 'birth_day': last_week})
         tests = (
             # Operator, Value, Expected
-            (operator.lt, today, [other_patient]),
-            (operator.lte, today, [patient, other_patient]),
-            (operator.gt, today, []),
-            (operator.gte, today, [patient]),
-            (operator.eq, last_week, [other_patient]),
+            (comparisons.LT, today, [other_patient]),
+            (comparisons.LTE, today, [patient, other_patient]),
+            (comparisons.GT, today, []),
+            (comparisons.GTE, today, [patient]),
+            (comparisons.EQUAL, last_week, [other_patient]),
         )
         for op, val, expected in tests:
             result = self.backend.filter_patients(('birth_date', op, val))
@@ -162,11 +163,11 @@ class BackendTestMixin(object):
         other_provider = self.backend.create_provider({'name': 'Jane'})
         tests = (
             # Operator, Value, Expected
-            (operator.eq, 'Joe', [provider]),
-            (operator.mod, 'Jo', [provider]),
-            (operator.mod, 'J', [provider, other_provider]),
-            (operator.contains, ['Joe'], [provider]),
-            (operator.contains, ['Joe', 'Jane'], [provider, other_provider]),
+            (comparisons.EQUAL, 'Joe', [provider]),
+            (comparisons.LIKE, 'Jo', [provider]),
+            (comparisons.LIKE, 'J', [provider, other_provider]),
+            (comparisons.IN, ['Joe'], [provider]),
+            (comparisons.IN, ['Joe', 'Jane'], [provider, other_provider]),
         )
         for op, val, expected in tests:
             result = self.backend.filter_providers(('name', op, val))
