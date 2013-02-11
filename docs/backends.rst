@@ -50,7 +50,7 @@ defined below:
 
         Returns a list of patients matching the set of lookups. If no patients were found it should
         return an empty list. If no lookups were passed it should return all patients. The details
-        of the lookup structure is given in the next section. When mutliple lookups are passed,
+        of the lookup structure is given in the next section. When multiple lookups are passed,
         the intersection of the results should be returned (default to AND the expressions).
 
     .. method:: get_provider(id)
@@ -78,7 +78,7 @@ defined below:
 
         Returns a list of providers matching the set of lookups. If no providers were found it should
         return an empty list. If no lookups were passed it should return all providers. The details
-        of the lookup structure is given in the next section. When mutliple lookups are passed,
+        of the lookup structure is given in the next section. When multiple lookups are passed,
         the intersection of the results should be returned (default to AND the expressions).
 
 
