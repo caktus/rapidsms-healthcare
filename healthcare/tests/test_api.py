@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
 import datetime
-import unittest
+
+from django.utils import unittest
 
 from mock import patch
 
