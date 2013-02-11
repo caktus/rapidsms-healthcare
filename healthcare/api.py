@@ -3,14 +3,29 @@ Healthcare API client.
 """
 from __future__ import unicode_literals
 
+import operator
+
 from django.conf import settings
 
+from .backends import comparisons
 from .backends.base import get_backend
+
 from .exceptions import PatientDoesNotExist, ProviderDoesNotExist
 
 
 class CategoryWrapper(object):
     "Simple wrapper to translate a category (patient/provider) of backend calls."
+
+    _lookup_mapping = {
+        '': comparisons.EQUAL,
+        'exact': comparisons.EQUAL,
+        'like': comparisons.LIKE,
+        'in': comparisons.IN,
+        'lt': comparisons.LT,
+        'lte': comparisons.LTE,
+        'gt': comparisons.GT,
+        'gte': comparisons.GTE,
+    }
 
     def __init__(self, backend, category):
         self.backend, self.category = backend, category
@@ -30,6 +45,25 @@ class CategoryWrapper(object):
     def delete(self, id):
         method = getattr(self.backend, 'delete_{category}'.format(category=self.category))
         return bool(method(id))
+
+    def _translate_filter_expression(self, name, value):
+        "Convert a field lookup into the appropriate backend call."
+        parts = name.split('__')
+        if len(parts) > 1:
+            field_name = parts[0]
+            lookup = parts[-1]
+        else:
+            field_name = parts[0]
+            lookup = ''
+        comparison = self._lookup_mapping.get(lookup)
+        if comparison is None:
+            raise TypeError("Invalid lookup type: {0}".format(lookup))
+        return (field_name, comparison, value)
+
+    def filter(self, **kwargs):
+        method = getattr(self.backend, 'filter_{category}s'.format(category=self.category))
+        args = [self._translate_filter_expression(k, v) for k, v in kwargs.items()]
+        return method(args)
 
 
 class PatientWrapper(CategoryWrapper):

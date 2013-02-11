@@ -1,8 +1,12 @@
+from __future__ import unicode_literals
+
+import datetime
 import unittest
 
 from mock import patch
 
 from ..api import HealthcareAPI
+from ..backends import comparisons
 from ..exceptions import PatientDoesNotExist, ProviderDoesNotExist
 
 
@@ -92,3 +96,45 @@ class APIClientTestCase(unittest.TestCase):
     def test_delete_missing_provider(self):
         "Try to delete a provider which doesn't exist."
         self.assertFalse(self.client.providers.delete(123))
+
+    def test_filter_patients(self):
+        "Translate API patient filter calls to the backend."
+        today = datetime.date.today()
+        with patch('healthcare.backends.dummy.DummyStorage.filter_patients') as filter_call:
+            test_calls = (
+                # Filter args, Expected backend call
+                ({'name': 'Jane'}, [('name', comparisons.EQUAL, 'Jane')]),
+                ({'name__like': 'Jane'}, [('name', comparisons.LIKE, 'Jane')]),
+                ({'name__in': ('Jane', )}, [('name', comparisons.IN, ('Jane', ))]),
+                ({'birth_date__lt': today}, [('birth_date', comparisons.LT, today)]),
+                ({'birth_date__lte': today}, [('birth_date', comparisons.LTE, today)]),
+                ({'birth_date__gt': today}, [('birth_date', comparisons.GT, today)]),
+                ({'birth_date__gte': today}, [('birth_date', comparisons.GTE, today)]),
+            )
+            for kwargs, expected in test_calls:
+                self.client.patients.filter(**kwargs)
+                self.assertTrue(filter_call.called, "Backend filter_patients should be called.")
+                args, _ = filter_call.call_args
+                self.assertEqual(expected, *args)
+                filter_call.reset_mock()
+
+    def test_filter_providers(self):
+        "Translate API provider filter calls to the backend."
+        today = datetime.date.today()
+        with patch('healthcare.backends.dummy.DummyStorage.filter_providers') as filter_call:
+            test_calls = (
+                # Filter args, Expected backend call
+                ({'name': 'Jane'}, [('name', comparisons.EQUAL, 'Jane')]),
+                ({'name__like': 'Jane'}, [('name', comparisons.LIKE, 'Jane')]),
+                ({'name__in': ('Jane', )}, [('name', comparisons.IN, ('Jane', ))]),
+                ({'created_date__lt': today}, [('created_date', comparisons.LT, today)]),
+                ({'created_date__lte': today}, [('created_date', comparisons.LTE, today)]),
+                ({'created_date__gt': today}, [('created_date', comparisons.GT, today)]),
+                ({'created_date__gte': today}, [('created_date', comparisons.GTE, today)]),
+            )
+            for kwargs, expected in test_calls:
+                self.client.providers.filter(**kwargs)
+                self.assertTrue(filter_call.called, "Backend filter_providers should be called.")
+                args, _ = filter_call.call_args
+                self.assertEqual(expected, *args)
+                filter_call.reset_mock()
