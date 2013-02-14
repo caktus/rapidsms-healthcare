@@ -1,0 +1,3 @@
+[run]
+source = healthcare
+omit = */tests*,*/migrations/*
