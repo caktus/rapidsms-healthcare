@@ -46,6 +46,14 @@ class HealthcareStorage(object):
         "Find patient records matching the given lookups."
         raise NotImplementedError("Define in subclass")
 
+    def link_patient(self, id, source_id, source_name): 
+        "Associated a source/id pair with this patient."
+        raise NotImplementedError("Define in subclass")
+
+    def unlink_patient(self, id, source_id, source_name): 
+        "Remove association of a source/id pair with this patient."
+        raise NotImplementedError("Define in subclass")
+
     def get_provider(self, id):
         "Retrieve a provider record by ID."
         raise NotImplementedError("Define in subclass")

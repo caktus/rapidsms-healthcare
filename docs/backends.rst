@@ -53,6 +53,17 @@ defined below:
         of the lookup structure is given in the next section. When multiple lookups are passed,
         the intersection of the results should be returned (default to AND the expressions).
 
+    .. method:: link_patient(id, source_id, source_name)
+
+        Associates a patient with an addition identifier. The ``source_id`` and ``source_name`` pair
+        should be enforced as unique. This should return a ``True`` value if the association was created.
+        Otherwise it should return ``False``.
+
+    .. method:: unlink_patient(id, source_id, source_name)
+
+        Removes an association of a patient with an addition identifier. This should return a ``True``
+        value if the association was found and removed. Otherwise it should return ``False``.
+
     .. method:: get_provider(id)
 
         Provider data should be fetched for the given ``id`` and returned as a dictionary. If
