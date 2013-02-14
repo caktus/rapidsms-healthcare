@@ -139,3 +139,15 @@ class APIClientTestCase(unittest.TestCase):
                 args, _ = filter_call.call_args
                 self.assertEqual(expected, *args)
                 filter_call.reset_mock()
+
+    def test_link_patient(self):
+        "Link a patient with an another ID with the API client."
+        with patch('healthcare.backends.dummy.DummyStorage.link_patient') as link:
+            self.client.patients.link(123, 'abc', 'FOO')
+            self.assertTrue(link.called, "Backend link_patient should be called.")
+
+    def test_unlink_patient(self):
+        "Unlink a patient with an another ID with the API client."
+        with patch('healthcare.backends.dummy.DummyStorage.unlink_patient') as unlink:
+            self.client.patients.unlink(123, 'abc', 'FOO')
+            self.assertTrue(unlink.called, "Backend unlink_patient should be called.")
