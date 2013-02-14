@@ -25,10 +25,15 @@ defined below:
 
 .. class:: HealthcareStorage()
 
-    .. method:: get_patient(id)
+    .. method:: get_patient(id, source=None)
 
         Patient data should be fetched for the given ``id`` and returned as a dictionary. If
         the patient does not exist this method should return ``None``.
+
+        ``source`` is an optional paramter. If given then the ``id`` should be interpreted
+        as the ``source_id`` and the ``source`` as the ``source_name`` to find the patient
+        using the association created by py:meth:`HealthcareStorage.link_patient`. If the patient
+        cannot be found for this association it should also return ``None``.
 
     .. method:: create_patient(data)
 
