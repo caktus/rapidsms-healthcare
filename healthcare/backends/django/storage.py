@@ -47,22 +47,12 @@ class DjangoStorage(HealthcareStorage):
         params = {'{0}__{1}'.format(field, lookup_type): value}
         return Q(**params)
 
-    def get_patient(self, id, location=None):
+    def get_patient(self, id):
         "Retrieve a patient record by ID."
-        if location is None:
-            try:
-                patient = Patient.objects.get(pk=id)
-            except (ValueError, Patient.DoesNotExist):
-                patient = None
-        else:
-            try:
-                patient_id = PatientID.objects.all().select_related('patient').get(
-                    uid=id, location_id=location
-                )
-            except (ValueError, PatientID.DoesNotExist):
-                patient = None
-            else:
-                patient = patient_id.patient
+        try:
+            patient = Patient.objects.get(pk=id)
+        except (ValueError, Patient.DoesNotExist):
+            patient = None
         return self._patient_to_dict(patient) if patient is not None else None
 
     def create_patient(self, data):
@@ -105,6 +95,31 @@ class DjangoStorage(HealthcareStorage):
         else:
             q = Q()
         return map(self._patient_to_dict, Patient.objects.filter(q))
+
+    def link_patient(self, id, source_id, source_name):
+        "Associated a source/id pair with this patient."
+        try:
+            patient_id, created = PatientID.objects.get_or_create(
+                uid=source_id, source=source_name, defaults={'patient_id': id}
+            )
+        except ValueError:
+            return False
+        else:
+            return created
+
+    def unlink_patient(self, id, source_id, source_name):
+        "Remove association of a source/id pair with this patient."
+        try:
+            patient_id = PatientID.objects.filter(
+                uid=source_id, source=source_name, patient=id
+            )
+        except ValueError:
+            return False
+        else:
+            if patient_id.exists():
+                patient_id.delete()
+                return True
+            return False
 
     def get_provider(self, id):
         "Retrieve a provider record by ID."

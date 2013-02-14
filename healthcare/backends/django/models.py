@@ -54,17 +54,9 @@ class Provider(AuditModelBase):
 class PatientID(AuditModelBase):
     "Identifier for patient/facility pair."
 
-    TYPE_GENERATED = 'G'
-    TYPE_ISSUED = 'I'
-    TYPE_CHOICES = (
-        (TYPE_GENERATED, _('Generated')),
-        (TYPE_ISSUED , _('Issued')),
-    )
-
     uid = models.CharField(max_length=255)
-    uid_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     patient = models.ForeignKey(Patient)
-    location = models.CharField(max_length=512)
+    source = models.CharField(max_length=512)
 
     def __unicode__(self):
         return self.uid
