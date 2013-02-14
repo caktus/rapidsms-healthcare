@@ -47,12 +47,29 @@ class DjangoStorage(HealthcareStorage):
         params = {'{0}__{1}'.format(field, lookup_type): value}
         return Q(**params)
 
-    def get_patient(self, id):
-        "Retrieve a patient record by ID."
+    def _get_patient_by_id(self, id):
+        "Get patient by pk."
         try:
             patient = Patient.objects.get(pk=id)
         except (ValueError, Patient.DoesNotExist):
             patient = None
+        return patient
+
+    def _get_patient_for_source(self, id, source):
+        "Get patient by source_id, source_name pair."
+        try:
+            patient = PatientID.objects.select_related('patient').get(
+                uid=id, source=source).patient
+        except (ValueError, PatientID.DoesNotExist):
+            patient = None
+        return patient
+
+    def get_patient(self, id, source=None):
+        "Retrieve a patient record by ID."
+        if source:
+            patient = self._get_patient_for_source(id, source)
+        else:
+            patient = self._get_patient_by_id(id)
         return self._patient_to_dict(patient) if patient is not None else None
 
     def create_patient(self, data):
