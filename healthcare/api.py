@@ -72,10 +72,14 @@ class PatientWrapper(CategoryWrapper):
     def __init__(self, backend):
         super(PatientWrapper, self).__init__(backend, 'patient')
 
-    def get(self, id):
-        result = super(PatientWrapper, self).get(id)
+    def get(self, id, source=None):
+        result = super(PatientWrapper, self).get(id, source=source)
         if result is None:
-            raise PatientDoesNotExist("Patient ID {0} was not found".format(id))
+            if source:
+                message = "Patient ID {0} for {1} was not found".format(id, source)
+            else:
+                message = "Patient ID {0} was not found".format(id)
+            raise PatientDoesNotExist(message)
         return result
 
     def link(self, id, source_id, source_name):
