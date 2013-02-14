@@ -172,3 +172,51 @@ class BackendTestMixin(object):
         for op, val, expected in tests:
             result = self.backend.filter_providers(('name', op, val))
             self.assertItemsEqual(expected, result)
+
+    def test_link_patient_identifier(self):
+        "Link a patient with an additional id."
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        source_id = 'FOO'
+        source_name = 'BAR'
+        result = self.backend.link_patient(patient['id'], source_id, source_name)
+        self.assertTrue(result, "Association should be created.")
+
+    def test_link_missing_patient(self):
+        "Try to link a patient which doesn't exist."
+        source_id = 'FOO'
+        source_name = 'BAR'
+        result = self.backend.link_patient('XXXX', source_id, source_name)
+        self.assertFalse(result, "Association should not be created.")
+
+    def test_link_duplicate_id(self):
+        "Try to associate multiple patients with the same id."
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        other_patient = self.backend.create_patient({'name': 'Jane', 'sex': 'F'})
+        source_id = 'FOO'
+        source_name = 'BAR'
+        self.backend.link_patient(patient['id'], source_id, source_name)
+        result = self.backend.link_patient(other_patient['id'], source_id, source_name)
+        self.assertFalse(result, "Association should not be created.")
+
+    def test_unlink_patient_identifier(self):
+        "Remove a patient identifier association."
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        source_id = 'FOO'
+        source_name = 'BAR'
+        self.backend.link_patient(patient['id'], source_id, source_name)
+        result = self.backend.unlink_patient(patient['id'], source_id, source_name)
+        self.assertTrue(result, "Association should be removed.")
+
+    def test_unlink_missing_patient(self):
+        "Try to unlink a patient which doesn't exist."
+        result = self.backend.unlink_patient(1234, 'XXXX', 'YYYYY')
+        self.assertFalse(result, "Association should not be removed.")
+
+    def test_unlink_missing_id(self):
+        "Try to unlink an invalid id."
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        source_id = 'FOO'
+        source_name = 'BAR'
+        self.backend.link_patient(patient['id'], source_id, source_name)
+        result = self.backend.unlink_patient(patient['id'], 'XXXX', source_name)
+        self.assertFalse(result, "Association should not be removed.")
