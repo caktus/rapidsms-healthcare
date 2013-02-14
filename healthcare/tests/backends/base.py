@@ -220,3 +220,18 @@ class BackendTestMixin(object):
         self.backend.link_patient(patient['id'], source_id, source_name)
         result = self.backend.unlink_patient(patient['id'], 'XXXX', source_name)
         self.assertFalse(result, "Association should not be removed.")
+
+    def test_get_by_source(self):
+        "Get patient by source id/name pair."
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        source_id = 'FOO'
+        source_name = 'BAR'
+        self.backend.link_patient(patient['id'], source_id, source_name)
+        result = self.backend.get_patient(source_id, source=source_name)
+        self.assertEqual(patient['id'], result['id'])
+
+    def test_get_missing_by_source(self):
+        "Try to get a patient for a missing source id/name pair."
+        patient = self.backend.create_patient({'name': 'Joe', 'sex': 'M'})
+        result = self.backend.get_patient('FOO', source='BAR')
+        self.assertEqual(None, result)
