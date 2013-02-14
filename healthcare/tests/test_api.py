@@ -151,3 +151,12 @@ class APIClientTestCase(unittest.TestCase):
         with patch('healthcare.backends.dummy.DummyStorage.unlink_patient') as unlink:
             self.client.patients.unlink(123, 'abc', 'FOO')
             self.assertTrue(unlink.called, "Backend unlink_patient should be called.")
+
+    def test_get_patient_for_source(self):
+        "Get a patient by source id/source name."
+        with patch('healthcare.backends.dummy.DummyStorage.get_patient') as get:
+            self.client.patients.get(123, source='ABC')
+            self.assertTrue(get.called, "Backend get_patient should be called.")
+            args, kwargs = get.call_args
+            self.assertEqual(123, args[0])
+            self.assertEqual('ABC', kwargs['source'])
