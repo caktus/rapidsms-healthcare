@@ -324,7 +324,7 @@ ____________________________________
 
 Similar to the ORM, the ``lt`` and ``lte`` expressions are inequality expressions. These
 are used to find data either strictly less than or less than or equal to a given value
-respectively.
+respectively.::
 
     import datetime
 
@@ -336,7 +336,7 @@ respectively.
 ____________________________________
 
 ``gt`` and ``gte`` expressions are inequality expressions. These are used to find
-data either strictly greater than or greater than or equal to a given value respectively.
+data either strictly greater than or greater than or equal to a given value respectively.::
 
     import datetime
 
