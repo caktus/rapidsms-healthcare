@@ -1,7 +1,12 @@
 #!/usr/bin/env python
+import optparse
 import sys
 
 from django.conf import settings
+
+
+parser = optparse.OptionParser()
+opts, args = parser.parse_args()
 
 
 if not settings.configured:
@@ -28,7 +33,7 @@ from django.test.utils import get_runner
 def runtests():
     TestRunner = get_runner(settings)
     test_runner = TestRunner(verbosity=1, interactive=True, failfast=False)
-    failures = test_runner.run_tests(['healthcare', ])
+    failures = test_runner.run_tests(args or ['healthcare', ])
     sys.exit(failures)
 
 
