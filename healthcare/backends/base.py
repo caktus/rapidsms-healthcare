@@ -26,7 +26,7 @@ def get_backend(path):
 
 class HealthcareStorage(object):
 
-    def get_patient(self, id, location=None):
+    def get_patient(self, id):
         "Retrieve a patient record by ID."
         raise NotImplementedError("Define in subclass")
 

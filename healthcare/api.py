@@ -73,7 +73,7 @@ class PatientWrapper(CategoryWrapper):
         super(PatientWrapper, self).__init__(backend, 'patient')
 
     def get(self, id, location=None):
-        result = super(PatientWrapper, self).get(id, location=location)
+        result = super(PatientWrapper, self).get(id)
         if result is None:
             raise PatientDoesNotExist("Patient ID {0} was not found".format(id))
         return result
