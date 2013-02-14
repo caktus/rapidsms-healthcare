@@ -40,9 +40,20 @@ class DummyStorage(HealthcareStorage):
             return comparison_func(field_value, value)
         return filter_func
 
-    def get_patient(self, id):
+    def _build_source_id(self, source_id, source_name):
+       return '{0}-{1}'.format(source_id, source_name)
+
+    def get_patient(self, id, source=None):
         "Retrieve a patient record by ID."
-        return self._patients.get(id)
+        patient = None
+        if source:
+            uid = self._build_source_id(id, source)
+            patient_id = self._patient_ids.get(uid)
+            if patient_id:
+                patient = self._patients.get(patient_id)
+        else:
+            patient = self._patients.get(id)
+        return patient
 
     def create_patient(self, data):
         "Create a patient record."
@@ -77,7 +88,7 @@ class DummyStorage(HealthcareStorage):
 
     def link_patient(self, id, source_id, source_name):
         "Associated a source/id pair with this patient."
-        uid = u'{0}-{1}'.format(source_id, source_name)
+        uid = self._build_source_id(source_id, source_name)
         if uid in self._patient_ids:
             return False
         if id not in self._patients:
@@ -87,7 +98,7 @@ class DummyStorage(HealthcareStorage):
 
     def unlink_patient(self, id, source_id, source_name):
         "Remove association of a source/id pair with this patient."
-        uid = u'{0}-{1}'.format(source_id, source_name)
+        uid = self._build_source_id(source_id, source_name)
         if uid in self._patient_ids:
             del self._patient_ids[uid]
             return True
