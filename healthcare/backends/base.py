@@ -26,7 +26,7 @@ def get_backend(path):
 
 class HealthcareStorage(object):
 
-    def get_patient(self, id, location=None):
+    def get_patient(self, id, source=None):
         "Retrieve a patient record by ID."
         raise NotImplementedError("Define in subclass")
 
@@ -44,6 +44,14 @@ class HealthcareStorage(object):
 
     def filter_patients(self, *lookups):
         "Find patient records matching the given lookups."
+        raise NotImplementedError("Define in subclass")
+
+    def link_patient(self, id, source_id, source_name):
+        "Associated a source/id pair with this patient."
+        raise NotImplementedError("Define in subclass")
+
+    def unlink_patient(self, id, source_id, source_name):
+        "Remove association of a source/id pair with this patient."
         raise NotImplementedError("Define in subclass")
 
     def get_provider(self, id):

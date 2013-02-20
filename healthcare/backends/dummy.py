@@ -13,6 +13,7 @@ class DummyStorage(HealthcareStorage):
     "In-memory storage. This should only be used for testing."
 
     _patients = {}
+    _patient_ids = {}
     _providers = {}
 
     _comparison_mapping = {
@@ -39,10 +40,20 @@ class DummyStorage(HealthcareStorage):
             return comparison_func(field_value, value)
         return filter_func
 
-    def get_patient(self, id, location=None):
+    def _build_source_id(self, source_id, source_name):
+       return '{0}-{1}'.format(source_id, source_name)
+
+    def get_patient(self, id, source=None):
         "Retrieve a patient record by ID."
-        uid = id if location is None else u'{0}-{1}'.format(id, location)
-        return self._patients.get(uid)
+        patient = None
+        if source:
+            uid = self._build_source_id(id, source)
+            patient_id = self._patient_ids.get(uid)
+            if patient_id:
+                patient = self._patients.get(patient_id)
+        else:
+            patient = self._patients.get(id)
+        return patient
 
     def create_patient(self, data):
         "Create a patient record."
@@ -74,6 +85,24 @@ class DummyStorage(HealthcareStorage):
         "Find patient records matching the given lookups."
         filters = map(self._lookup_to_filter, lookups)
         return filter(lambda t: all(f(t) for f in filters), self._patients.values())
+
+    def link_patient(self, id, source_id, source_name):
+        "Associated a source/id pair with this patient."
+        uid = self._build_source_id(source_id, source_name)
+        if uid in self._patient_ids:
+            return False
+        if id not in self._patients:
+            return False
+        self._patient_ids[uid] = id
+        return True
+
+    def unlink_patient(self, id, source_id, source_name):
+        "Remove association of a source/id pair with this patient."
+        uid = self._build_source_id(source_id, source_name)
+        if uid in self._patient_ids:
+            del self._patient_ids[uid]
+            return True
+        return False
 
     def get_provider(self, id):
         "Retrieve a provider record by ID."

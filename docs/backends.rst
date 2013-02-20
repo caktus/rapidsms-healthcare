@@ -25,10 +25,15 @@ defined below:
 
 .. class:: HealthcareStorage()
 
-    .. method:: get_patient(id)
+    .. method:: get_patient(id, source=None)
 
         Patient data should be fetched for the given ``id`` and returned as a dictionary. If
         the patient does not exist this method should return ``None``.
+
+        ``source`` is an optional paramter. If given then the ``id`` should be interpreted
+        as the ``source_id`` and the ``source`` as the ``source_name`` to find the patient
+        using the association created by py:meth:`HealthcareStorage.link_patient`. If the patient
+        cannot be found for this association it should also return ``None``.
 
     .. method:: create_patient(data)
 
@@ -52,6 +57,17 @@ defined below:
         return an empty list. If no lookups were passed it should return all patients. The details
         of the lookup structure is given in the next section. When multiple lookups are passed,
         the intersection of the results should be returned (default to AND the expressions).
+
+    .. method:: link_patient(id, source_id, source_name)
+
+        Associates a patient with an addition identifier. The ``source_id`` and ``source_name`` pair
+        should be enforced as unique. This should return a ``True`` value if the association was created.
+        Otherwise it should return ``False``.
+
+    .. method:: unlink_patient(id, source_id, source_name)
+
+        Removes an association of a patient with an addition identifier. This should return a ``True``
+        value if the association was found and removed. Otherwise it should return ``False``.
 
     .. method:: get_provider(id)
 

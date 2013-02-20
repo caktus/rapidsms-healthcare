@@ -10,3 +10,4 @@ class DummyBackendTestCase(BackendTestMixin, unittest.TestCase):
         super(DummyBackendTestCase, self).setUp()
         self.backend._patients = {}
         self.backend._providers = {}
+        self.backend._patient_ids = {}

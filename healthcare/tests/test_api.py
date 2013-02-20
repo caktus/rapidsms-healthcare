@@ -139,3 +139,28 @@ class APIClientTestCase(unittest.TestCase):
                 args, _ = filter_call.call_args
                 self.assertEqual(expected, *args)
                 filter_call.reset_mock()
+
+    def test_link_patient(self):
+        "Link a patient with an another ID with the API client."
+        with patch('healthcare.backends.dummy.DummyStorage.link_patient') as link:
+            self.client.patients.link(123, 'abc', 'FOO')
+            self.assertTrue(link.called, "Backend link_patient should be called.")
+
+    def test_unlink_patient(self):
+        "Unlink a patient with an another ID with the API client."
+        with patch('healthcare.backends.dummy.DummyStorage.unlink_patient') as unlink:
+            self.client.patients.unlink(123, 'abc', 'FOO')
+            self.assertTrue(unlink.called, "Backend unlink_patient should be called.")
+
+    def test_get_patient_for_source(self):
+        "Get a patient by source id/name."
+        with patch('healthcare.backends.dummy.DummyStorage.get_patient') as get:
+            self.client.patients.get(123, source='ABC')
+            self.assertTrue(get.called, "Backend get_patient should be called.")
+            args, kwargs = get.call_args
+            self.assertEqual(123, args[0])
+            self.assertEqual('ABC', kwargs['source'])
+
+    def test_get_missing_patient_for_source(self):
+        "Try to get a patient by source id/name which doesn't exist."
+        self.assertRaises(PatientDoesNotExist, self.client.patients.get, 123, source='ABC')
