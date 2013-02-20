@@ -8,6 +8,11 @@ for the data itself. For instance on site might store data using a SQL database 
 the Django ORM while another might store the data in OpenMRS. Additional Django/RapidSMS
 applications can use this API to store and retrive data without knowning how it will be stored.
 
+.. image::
+    https://secure.travis-ci.org/caktus/rapidsms-healthcare.png?branch=master
+    :alt: Build Status
+        :target: https://secure.travis-ci.org/caktus/rapidsms-healthcare
+
 
 Dependencies
 -----------------------------------
