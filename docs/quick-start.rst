@@ -36,7 +36,20 @@ If you are using the default storage backend you need to change your ``INSTALLED
         'healthcare.backends.djhealth',
     )
 
-If you are using a different backend then you can skip this step.
+If you are using a different backend then you can skip this step. The Django backend uses `South <http://south.aeracode.org/>`_
+to manage possible future changes to the schema. While not required if you are using South in your project
+then you can create the tables needed for the backend via::
+
+    python manage.py migrate djhealth
+
+If you are not using South then you can create the tables via::
+
+    python manage.py syncdb
+
+.. note::
+
+    While using South is optional, it is highly recommended. If you are not using South then you may need to
+    apply future schema change yourself. When needed these will be noted in the release notes.
 
 
 Next Steps
