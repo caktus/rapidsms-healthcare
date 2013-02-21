@@ -33,7 +33,7 @@ If you are using the default storage backend you need to change your ``INSTALLED
 
     INSTALLED_APPS = (
         # Other apps go here
-        'healthcare.backends.django',
+        'healthcare.backends.djhealth',
     )
 
 If you are using a different backend then you can skip this step.

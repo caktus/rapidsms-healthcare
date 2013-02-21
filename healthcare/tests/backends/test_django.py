@@ -6,4 +6,4 @@ from .base import BackendTestMixin
 
 
 class DjangoBackendTestCase(BackendTestMixin, TestCase):
-    backend = 'healthcare.backends.django.DjangoStorage'
+    backend = 'healthcare.backends.djhealth.DjangoStorage'

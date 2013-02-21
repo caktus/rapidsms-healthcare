@@ -28,10 +28,10 @@ all of the available backends included in the rapidsms-healthcare distribution.
 DjangoStorage
 ____________________________________
 
-Path: ``'healthcare.backends.django.DjangoStorage'``
+Path: ``'healthcare.backends.djhealth.DjangoStorage'``
 
 This is the default storage backend. It stores the patient and provider information using the
-Django ORM. To use this backend you must include ``'healthcare.backends.django'`` in your
+Django ORM. To use this backend you must include ``'healthcare.backends.djhealth'`` in your
 ``INSTALLED_APPS`` setting to create the necessary tables.
 
 .. warning::

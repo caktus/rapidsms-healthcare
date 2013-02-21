@@ -10,12 +10,12 @@ their default values.
 HEALTHCARE_STORAGE_BACKEND
 ------------------------------------
 
-Default: ``'healthcare.backends.django.DjangoStorage'``
+Default: ``'healthcare.backends.djhealth.DjangoStorage'``
 
 Controls where rapidsms-healthcare stores patient and provider data. The default
 backends provided are:
 
 * :ref:`healthcare.backends.dummy.DummyStorage <DummyStorage>`
-* :ref:`healthcare.backends.django.DjangoStorage <DjangoStorage>`
+* :ref:`healthcare.backends.djhealth.DjangoStorage <DjangoStorage>`
 
 Additional backends can be written as needed.

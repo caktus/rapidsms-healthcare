@@ -19,9 +19,9 @@ if not settings.configured:
         },
         INSTALLED_APPS=(
             'healthcare',
-            'healthcare.backends.django',
+            'healthcare.backends.djhealth',
         ),
-        HEALTHCARE_STORAGE_BACKEND='healthcare.backends.django.DjangoStorage',
+        HEALTHCARE_STORAGE_BACKEND='healthcare.backends.djhealth.DjangoStorage',
         SITE_ID=1,
         SECRET_KEY='this-is-just-for-tests-so-not-that-secret',
     )

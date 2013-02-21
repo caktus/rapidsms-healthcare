@@ -113,7 +113,7 @@ class HealthcareAPI(object):
         self.providers = ProviderWrapper(self.backend)
 
 
-STORAGE_BACKEND = getattr(settings, 'HEALTHCARE_STORAGE_BACKEND', 'healthcare.backends.django.DjangoStorage')
+STORAGE_BACKEND = getattr(settings, 'HEALTHCARE_STORAGE_BACKEND', 'healthcare.backends.djhealth.DjangoStorage')
 
 
 client = HealthcareAPI(STORAGE_BACKEND)
