@@ -1,5 +1,3 @@
 include AUTHORS
 include LICENSE
 include README.rst
-recursive-include healthcare/static *
-recursive-include healthcare/templates *
