@@ -20,6 +20,7 @@ if not settings.configured:
         INSTALLED_APPS=(
             'healthcare',
             'healthcare.backends.djhealth',
+            'rapidsms',
         ),
         HEALTHCARE_STORAGE_BACKEND='healthcare.backends.djhealth.DjangoStorage',
         SITE_ID=1,

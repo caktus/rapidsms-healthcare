@@ -46,6 +46,7 @@ class Provider(AuditModelBase):
 
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=512, blank=True, default='')
+    contact = models.ForeignKey('rapidsms.Contact', unique=True, blank=True, null=True)
 
     def __unicode__(self):
         return self.name

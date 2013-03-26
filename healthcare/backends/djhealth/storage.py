@@ -39,6 +39,8 @@ class DjangoStorage(HealthcareStorage):
         result = model_to_dict(provider)
         result['created_date'] = provider.created_date
         result['updated_date'] = provider.updated_date
+        result['contact'] = provider.contact
+        result['contact_id'] = provider.contact.id if provider.contact else None
         return result
 
     def _lookup_to_q(self, lookup):
@@ -143,6 +145,14 @@ class DjangoStorage(HealthcareStorage):
         try:
             provider = Provider.objects.get(pk=id)
         except (ValueError, Provider.DoesNotExist):
+            provider = None
+        return self._provider_to_dict(provider) if provider is not None else None
+
+    def get_provider_by_contact(self, contact):
+        "Retrieve a provider record by Contact."
+        try:
+            provider = Provider.objects.get(contact=contact)
+        except (ValueError, Provider.DoesNotExist, Provider.MultipleObjectsReturned):
             provider = None
         return self._provider_to_dict(provider) if provider is not None else None
 

@@ -51,7 +51,7 @@ defined below:
         Patient data for the given ``id`` should be deleted. This method should return ``True`` if a patient
         was found and deleted and ``False`` otherwise.
 
-    .. method:: filter_patients(*lookups)
+    .. method:: filter_patients(\*lookups)
 
         Returns a list of patients matching the set of lookups. If no patients were found it should
         return an empty list. If no lookups were passed it should return all patients. The details
@@ -74,6 +74,11 @@ defined below:
         Provider data should be fetched for the given ``id`` and returned as a dictionary. If
         the provider does not exist this method should return ``None``.
 
+    .. method:: get_provider_by_contact(contact)
+
+        Provider data should be fetched for the given ``contact`` and returned as a dictionary.
+        If the provider does not exist this method should return ``None``.
+
     .. method:: create_provider(data)
 
         A provider record should be created for given set of ``data`` given as a dictionary.
@@ -90,7 +95,7 @@ defined below:
         Provider data for the given ``id`` should be deleted. This method should return ``True`` if a
         provider was found and deleted and ``False`` otherwise.
 
-    .. method:: filter_providers(*lookups)
+    .. method:: filter_providers(\*lookups)
 
         Returns a list of providers matching the set of lookups. If no providers were found it should
         return an empty list. If no lookups were passed it should return all providers. The details

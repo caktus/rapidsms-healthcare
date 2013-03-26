@@ -1,6 +1,8 @@
 import datetime
 import operator
 
+from rapidsms.models import Contact
+
 from ...backends import comparisons
 from ...backends.base import get_backend
 
@@ -62,16 +64,38 @@ class BackendTestMixin(object):
 
     def test_create_provider(self):
         "Store a new provider."
-        provider = self.backend.create_provider({'name': 'Joe'})
+        contact = Contact.objects.create()
+        provider = self.backend.create_provider({'name': 'Joe', 'contact': contact})
         # Newly create provider should have an id
         self.assertTrue(provider['id'])
         self.assertEqual(provider['created_date'].date(), datetime.date.today())
         self.assertTrue(provider['updated_date'].date(), datetime.date.today())
+        self.assertEqual(provider['contact'], contact)
+
+    def test_unique_contact(self):
+        contact = Contact.objects.create()
+        provider = self.backend.create_provider({'name': 'Joe', 'contact': contact})
+        provider2 = self.backend.create_provider({'name': 'Sam', 'contact': contact})
+        self.assertTrue(provider2 is None)
 
     def test_get_provider(self):
-        "Retrive a stored provider."
+        "Retrieve a stored provider by ID."
         provider = self.backend.create_provider({'name': 'Joe'})
         fetched = self.backend.get_provider(provider['id'])
+        self.assertEqual(provider, fetched)
+
+    def test_get_provider_by_contact(self):
+        "Retrieve a stored provider by Contact."
+        contact = Contact.objects.create()
+        provider = self.backend.create_provider({'name': 'Joe', 'contact': contact})
+        fetched = self.backend.get_provider_by_contact(contact)
+        self.assertEqual(provider, fetched)
+
+    def test_get_provider_by_contact_id(self):
+        "Retrieve a stored provider by Contact id."
+        contact = Contact.objects.create()
+        provider = self.backend.create_provider({'name': 'Joe', 'contact': contact})
+        fetched = self.backend.get_provider_by_contact(contact.id)
         self.assertEqual(provider, fetched)
 
     def test_update_provider(self):

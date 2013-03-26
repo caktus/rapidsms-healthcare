@@ -47,10 +47,16 @@ class APIClientTestCase(unittest.TestCase):
             self.assertTrue(create.called, "Backend create_provider should be called.")
 
     def test_get_provider(self):
-        "Get a provider record with the API client."
+        "Get a provider record by id with the API client."
         with patch('healthcare.backends.dummy.DummyStorage.get_provider') as get:
             self.client.providers.get(123)
             self.assertTrue(get.called, "Backend get_provider should be called.")
+
+    def test_get_provider_by_contact(self):
+        "Get a provider record by contact with the API client."
+        with patch('healthcare.backends.dummy.DummyStorage.get_provider') as get:
+            self.client.providers.get(123)
+            self.assertTrue(get.called, "Backend get_provider_by_contact should be called.")
 
     def test_update_provider(self):
         "Update a provider record with the API client."

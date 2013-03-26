@@ -15,6 +15,7 @@ class DummyStorage(HealthcareStorage):
     _patients = {}
     _patient_ids = {}
     _providers = {}
+    _provider_contacts = {}
 
     _comparison_mapping = {
         comparisons.EQUAL: operator.eq,
@@ -108,9 +109,31 @@ class DummyStorage(HealthcareStorage):
         "Retrieve a provider record by ID."
         return self._providers.get(id)
 
+    def get_provider_by_contact(self, contact):
+        "retrieve a provider record by contact."
+        cid = contact.pk if hasattr(contact, 'pk') else contact
+        if cid in self._provider_contacts:
+            return self.get_provider(self._provider_contacts[cid])
+        return None
+
+    def _add_provider_contact(self, id, contact_id, old_contact_id=None):
+        "If contact_id is unique, then it is associated with id and the old_contact_id association is removed."
+        if contact_id == old_contact_id:  # No changes necessary.
+            return True
+        if contact_id not in self._provider_contacts:
+            if old_contact_id in self._provider_contacts:  # Remove old contact id.
+                del self._provider_contacts[old_contact_id]
+            self._provider_contacts[contact_id] = id # Add new contact id.
+            return True
+        return False
+
     def create_provider(self, data):
         "Create a provider record."
         uid = uuid.uuid4().int
+        if 'contact' in data:
+            if not self._add_provider_contact(uid, data['contact'].id):
+                return None  # Given Contact is not unique.
+            data['contact_id'] = data['contact'].id
         data['created_date'] = now()
         data['updated_date'] = now()
         if 'status' not in data:
@@ -122,6 +145,18 @@ class DummyStorage(HealthcareStorage):
     def update_provider(self, id, data):
         "Update a provider record by ID."
         if id in self._providers:
+            # Ensure uniqueness of Contact.
+            if 'contact' in data:
+                new_contact = data.get('contact')
+                if not new_contact:  # Remove contact.
+                    data['contact'] = None
+                    data['content_id'] = None
+                else:
+                    old_contact_id = self._providers[id].get('contact_id', None)
+                    if not self._add_provider_contact(id, new_contact.id, old_contact_id):
+                        return False  # Given contact is not unique.
+                    data['contact'] = new_contact
+                    data['contact_id'] = new_contact.id
             data['updated_date'] = now()
             self._providers[id].update(data)
             return True
@@ -130,6 +165,9 @@ class DummyStorage(HealthcareStorage):
     def delete_provider(self, id):
         "Delete a provider record by ID."
         if id in self._providers:
+            contact_id = self._providers[id].get('contact_id', None)
+            if contact_id:
+                del self._providers_contacts[contact_id]
             del self._providers[id]
             return True
         return False
