@@ -103,6 +103,12 @@ class ProviderWrapper(CategoryWrapper):
             raise ProviderDoesNotExist("Provider ID {0} was not found".format(id))
         return result
 
+    def get_by_contact(self, contact):
+        result = self.backend.get_provider_by_contact(contact)
+        if result is None:
+            raise ProviderDoesNotExist("Provider with Contact {0} was not found".format(contact))
+        return result
+
 
 class HealthcareAPI(object):
     "API Client for accessing healthcare data via the configured backend."
