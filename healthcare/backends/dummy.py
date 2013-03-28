@@ -58,7 +58,7 @@ class DummyStorage(HealthcareStorage):
 
     def create_patient(self, data):
         "Create a patient record."
-        uid = uuid.uuid4().int
+        uid = unicode(uuid.uuid4().int)
         data['created_date'] = now()
         data['updated_date'] = now()
         if 'status' not in data:
