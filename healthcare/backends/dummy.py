@@ -129,7 +129,7 @@ class DummyStorage(HealthcareStorage):
 
     def create_provider(self, data):
         "Create a provider record."
-        uid = uuid.uuid4().int
+        uid = unicode(uuid.uuid4().int)
         if 'contact' in data:
             if not self._add_provider_contact(uid, data['contact'].id):
                 return None  # Given Contact is not unique.
