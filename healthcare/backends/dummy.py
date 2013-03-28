@@ -167,7 +167,7 @@ class DummyStorage(HealthcareStorage):
         if id in self._providers:
             contact_id = self._providers[id].get('contact_id', None)
             if contact_id:
-                del self._providers_contacts[contact_id]
+                del self._provider_contacts[contact_id]
             del self._providers[id]
             return True
         return False
